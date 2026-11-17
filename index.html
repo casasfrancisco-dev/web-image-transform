@@ -2,33 +2,16 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>WebGPU Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Transform - ONNX Test</title>
 </head>
 <body>
-    <h1>Prueba de WebGPU</h1>
-    <p id="status">Comprobando...</p>
+    <h1>Image Transform</h1>
+    <h2>Prueba de ONNX Runtime Web</h2>
 
-    <script>
-        async function testWebGPU() {
-            const status = document.getElementById("status");
+    <p id="status">Inicializando...</p>
+    <pre id="output"></pre>
 
-            if (!navigator.gpu) {
-                status.textContent = "WebGPU no está disponible";
-                return;
-            }
-
-            const adapter = await navigator.gpu.requestAdapter();
-
-            if (!adapter) {
-                status.textContent = "No se encontró GPU compatible";
-                return;
-            }
-
-            status.textContent = "WebGPU funciona correctamente - HTML";   
-            console.log("Adaptador:", adapter);
-        }
-
-        testWebGPU();
-    </script>
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>
