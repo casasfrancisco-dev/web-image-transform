@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGPU Test</title>
+</head>
+<body>
+    <h1>Prueba de WebGPU</h1>
+    <p id="status">Comprobando...</p>
+
+    <script>
+        async function testWebGPU() {
+            const status = document.getElementById("status");
+
+            if (!navigator.gpu) {
+                status.textContent = "WebGPU no está disponible";
+                return;
+            }
+
+            const adapter = await navigator.gpu.requestAdapter();
+
+            if (!adapter) {
+                status.textContent = "No se encontró GPU compatible";
+                return;
+            }
+
+            status.textContent = "WebGPU funciona correctamente";
+            console.log("Adaptador:", adapter);
+        }
+
+        testWebGPU();
+    </script>
+</body>
+</html>

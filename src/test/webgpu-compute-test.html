@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGPU Compute Test</title>
+</head>
+<body>
+    <h1>WebGPU - Compute Shader</h1>
+    <p id="status">Ejecutando prueba...</p>
+    <pre id="output"></pre>
+
+    <script>
+    async function testGPU() {
+        const status = document.getElementById("status");
+        const output = document.getElementById("output");
+
+        try {
+            const adapter = await navigator.gpu.requestAdapter();
+            const device = await adapter.requestDevice();
+
+            // Datos de entrada
+            const data = new Float32Array([
+                1, 2, 3, 4, 5, 6, 7, 8
+            ]);
+
+            const size = data.byteLength;
+
+            // Buffers GPU
+            const input = device.createBuffer({
+                size,
+                usage: GPUBufferUsage.STORAGE |
+                       GPUBufferUsage.COPY_DST
+            });
+
+            const result = device.createBuffer({
+                size,
+                usage: GPUBufferUsage.STORAGE |
+                       GPUBufferUsage.COPY_SRC
+            });
+
+            const readback = device.createBuffer({
+                size,
+                usage: GPUBufferUsage.COPY_DST |
+                       GPUBufferUsage.MAP_READ
+            });
+
+            device.queue.writeBuffer(input, 0, data);
+
+            // Shader WGSL
+            const shader = device.createShaderModule({
+                code: `
+                    @group(0) @binding(0)
+                    var<storage, read> input: array<f32>;
+
+                    @group(0) @binding(1)
+                    var<storage, read_write> output: array<f32>;
+
+                    @compute @workgroup_size(8)
+                    fn main(
+                        @builtin(global_invocation_id)
+                        id: vec3<u32>
+                    ) {
+                        let i = id.x;
+                        output[i] = input[i] * input[i];
+                    }
+                `
+            });
+
+            // Pipeline
+            const pipeline = device.createComputePipeline({
+                layout: "auto",
+                compute: {
+                    module: shader,
+                    entryPoint: "main"
+                }
+            });
+
+            const bindGroup = device.createBindGroup({
+                layout: pipeline.getBindGroupLayout(0),
+                entries: [
+                    { binding: 0, resource: { buffer: input } },
+                    { binding: 1, resource: { buffer: result } }
+                ]
+            });
+
+            // Ejecutar en GPU
+            const encoder = device.createCommandEncoder();
+            const pass = encoder.beginComputePass();
+
+            pass.setPipeline(pipeline);
+            pass.setBindGroup(0, bindGroup);
+            pass.dispatchWorkgroups(1);
+            pass.end();
+
+            encoder.copyBufferToBuffer(
+                result, 0, readback, 0, size
+            );
+
+            device.queue.submit([encoder.finish()]);
+
+            // Recuperar resultados
+            await readback.mapAsync(GPUMapMode.READ);
+
+            const values = Array.from(
+                new Float32Array(readback.getMappedRange())
+            );
+
+            readback.unmap();
+
+            status.textContent = "WebGPU: cálculo exitoso";
+            output.textContent =
+                "Entrada: " + Array.from(data) +
+                "\nResultado: " + values;
+
+            input.destroy();
+            result.destroy();
+            readback.destroy();
+            device.destroy();
+
+        } catch (error) {
+            status.textContent = "Error: " + error.message;
+            console.error(error);
+        }
+    }
+
+    testGPU();
+    </script>
+</body>
+</html>

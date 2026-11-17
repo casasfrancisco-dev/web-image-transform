@@ -1,2 +1,21 @@
 Python 3.13.3
 git version 2.56.1.windows.1
+WebGPU - Funciona correctamente
+Hugging face: https://huggingface.co/executorch-community/Real-ESRGAN-General-x4v3-ExecuTorch-WebGPU?utm_source=chatgpt.com
+Runtime:https://huggingface.co/executorch-community/ExecuTorch-WebGPU-Runtime?utm_source=chatgpt.com
+executorch_wasm_lib.js: interfaz JavaScript.
+executorch_wasm_lib.wasm: motor compilado a WebAssembly.
+
+ONNX Runtime Web
+Node v26.13.1
+Vite 11.20.0
+npm install -D vite
+Then run the appropriate CLI command in your terminal:
+npx vite
+The index.html will be served on http://localhost:5173.
+
+
+
+
+Ejecutar en consola
+python -m http.server 8000
