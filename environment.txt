@@ -19,3 +19,4 @@ The index.html will be served on http://localhost:5173.
 
 Ejecutar en consola
 python -m http.server 8000
+npm run dev

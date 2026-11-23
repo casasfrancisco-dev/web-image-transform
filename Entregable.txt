@@ -1,0 +1,17 @@
+Se instalaron las herramientas necesarias para trabajar:
+Repositorio GitHub - Controlador de version
+Tortoise git - Interfaz de shell de Windows para Git
+
+Node v26.13.1
+Vite 11.20.0
+onnxruntime-web
+
+Pruebas iniciales:
+WebGPU - Funciona correctamente
+Agregar Vite
+Cargar modelo de prueba sigmoid.onnx, para verificar que ONNX funciona correctamente.
+
+Prueba con modelo: real-esrgan-test.html
+Utilizando onnxruntime-web agregamos el modelo real-esrgan
+Hacemos la prueba con real-esrgan-test.html
+Se ejecuta correctamente el modelo y genera la imagen para la descarga.
