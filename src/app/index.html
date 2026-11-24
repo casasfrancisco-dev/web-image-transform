@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Web Image Transform</title>
+
+    <!-- Tabler -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css">
+
+    <!-- Tabler Icons -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+
+    <!-- Application styles -->
+    <link rel="stylesheet" href="assets/css/app.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="ti ti-photo-scan"></i>
+            </div>
+
+            <div>
+                <div class="brand-name">Image Transform</div>
+                <div class="brand-subtitle">IMAGE PROCESSING</div>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <button class="nav-link active" data-page="transform">
+                <i class="ti ti-photo"></i>
+                Transformar
+            </button>
+
+            <button class="nav-link" data-page="features">
+                <i class="ti ti-adjustments"></i>
+                Funcionalidades
+            </button>
+        </nav>
+
+        <div class="header-status">
+            <span class="status-dot"></span>
+            <span>Modo local</span>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="app-main">
+
+        <!-- Transform page -->
+        <section class="page active" id="transform">
+
+            <div class="workspace">
+
+                <div class="workspace-header">
+                    <div>
+                        <h2>Área de trabajo</h2>
+                        <p>Mejora y transforma tus imágenes.</p>
+                    </div>
+
+                    <button class="btn btn-outline-secondary btn-sm"
+                            id="clearImage">
+                        <i class="ti ti-refresh"></i>
+                        Limpiar
+                    </button>
+                </div>
+
+                <!-- Upload -->
+                <div class="upload-area" id="uploadArea">
+
+                    <input type="file"
+                           id="imageInput"
+                           accept="image/png,image/jpeg,image/webp"
+                           hidden>
+
+                    <div class="upload-content" id="uploadContent">
+                        <div class="upload-icon">
+                            <i class="ti ti-cloud-upload"></i>
+                        </div>
+
+                        <h3>Selecciona una imagen</h3>
+
+                        <p>
+                            Arrastra tu imagen aquí o selecciónala
+                            desde tu equipo.
+                        </p>
+
+                        <button class="btn btn-primary"
+                                id="selectImage">
+                            <i class="ti ti-folder-open"></i>
+                            Explorar archivos
+                        </button>
+
+                        <span class="upload-formats">
+                            PNG · JPG · WEBP
+                        </span>
+                    </div>
+
+                    <div class="image-preview hidden" id="imagePreview">
+                        <img id="originalImage" alt="Imagen original">
+
+                        <div class="image-info" id="imageInfo"></div>
+                    </div>
+                </div>
+
+                <!-- Comparison -->
+                <div class="comparison-section">
+
+                    <div class="section-heading">
+                        <h3>Comparación</h3>
+                        <span class="text-secondary">Original / Resultado</span>
+                    </div>
+
+                    <div class="comparison-grid">
+
+                        <div class="comparison-card">
+                            <div class="comparison-label">
+                                <span>Original</span>
+                                <span class="badge bg-secondary-lt">
+                                    Entrada
+                                </span>
+                            </div>
+
+                            <div class="comparison-image">
+                                <img id="comparisonOriginal"
+                                     alt="Imagen original"
+                                     class="hidden">
+
+                                <div class="empty-result" id="originalPlaceholder">
+                                    <i class="ti ti-photo"></i>
+                                    <span>Imagen original</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="comparison-card">
+                            <div class="comparison-label">
+                                <span>Resultado</span>
+                                <span class="badge bg-blue-lt">
+                                    Salida
+                                </span>
+                            </div>
+
+                            <div class="comparison-image">
+                                <div class="empty-result" id="resultPlaceholder">
+                                    <i class="ti ti-sparkles"></i>
+                                    <span>El resultado aparecerá aquí</span>
+                                </div>
+
+                                <img id="resultImage"
+                                     alt="Imagen procesada"
+                                     class="hidden">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Settings sidebar -->
+            <aside class="settings-panel">
+
+                <div class="settings-header">
+                    <i class="ti ti-adjustments-horizontal"></i>
+                    <h3>Configuración</h3>
+                </div>
+
+                <div class="settings-group">
+                    <label>Modelo de procesamiento</label>
+
+                    <div class="model-card">
+                        <div class="model-icon">
+                            <i class="ti ti-brain"></i>
+                        </div>
+
+                        <div>
+                            <strong>Real-ESRGAN</strong>
+                            <small>Image Super Resolution</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <label for="scaleSelect">Escala de imagen</label>
+
+                    <select class="form-select" id="scaleSelect">
+                        <option value="2">2x</option>
+                        <option value="4" selected>4x</option>
+                    </select>
+
+                    <small class="setting-description">
+                        Incremento de resolución de la imagen.
+                    </small>
+                </div>
+
+                <div class="settings-group">
+                    <label>Motor de procesamiento</label>
+
+                    <div class="engine-option">
+                        <i class="ti ti-device-desktop"></i>
+                        <span>WebGPU</span>
+                        <span class="engine-tag">Local</span>
+                    </div>
+                </div>
+
+                <div class="settings-divider"></div>
+
+                <div class="processing-info">
+                    <span>Estado</span>
+                    <strong id="processingStatus">Esperando imagen</strong>
+                </div>
+
+                <button class="btn btn-primary process-button"
+                        id="processButton"
+                        disabled>
+                    <i class="ti ti-wand"> </i>
+                    Mejorar imagen
+                </button>
+
+                <button class="btn btn-outline-secondary download-button"
+                        id="downloadButton"
+                        disabled>
+                    <i class="ti ti-download"></i>
+                    Descargar resultado
+                </button>
+
+                <p class="panel-footer">
+                    El procesamiento se ejecutará localmente
+                    en el navegador.
+                </p>
+
+            </aside>
+
+        </section>
+           
+        <!-- Features container -->
+        <div id="featuresContainer"></div>
+
+    </main>
+
+
+
+    <footer class="app-footer">
+        <span>Web Image Transform</span>
+        <span>Image processing in your browser</span>
+    </footer>
+
+</div>
+
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>
